@@ -2812,6 +2812,259 @@ class GamePhonicsMatcher extends MiniGame {
   }
 }
 
+// Game 25: Math Explorer
+class GameMathExplorer extends MiniGame {
+  start() {
+    this.currentMode = 'count';
+    this.targetCount = 0;
+    this.currentCount = 0;
+    this.mathProblem = null;
+    this.solved = false;
+
+    this.container.innerHTML = `
+      <div class="math-layout">
+        <div class="math-tabs">
+          <button class="math-tab-btn active" data-mode="count">🔢 Count to 30</button>
+          <button class="math-tab-btn" data-mode="arithmetic">➕ Add & Subtract</button>
+        </div>
+        <div id="math-content" style="flex:1; width:100%; display:flex; flex-direction:column; align-items:center;"></div>
+      </div>
+    `;
+
+    this.container.querySelectorAll('.math-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.container.querySelectorAll('.math-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.currentMode = btn.getAttribute('data-mode');
+        this.services.sound.playPop();
+        this.loadMode();
+      });
+    });
+
+    this.loadMode();
+  }
+
+  loadMode() {
+    const content = this.container.querySelector('#math-content');
+    content.innerHTML = '';
+
+    if (this.currentMode === 'count') {
+      this.services.speech.speak("Let's count objects up to 30! Tap each item to count.");
+      
+      this.targetCount = Math.floor(Math.random() * 21) + 10;
+      this.currentCount = 0;
+
+      content.innerHTML = `
+        <div class="math-number-badge" id="m-count-badge">0 / ${this.targetCount}</div>
+        <div class="math-board" id="m-board"></div>
+      `;
+
+      const board = content.querySelector('#m-board');
+      const emojis = ["⭐", "🌸", "🦋", "🍎", "🎈", "🐞"];
+      const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+
+      for (let i = 0; i < this.targetCount; i++) {
+        const item = document.createElement('div');
+        item.className = 'math-count-item';
+        item.innerText = emoji;
+        
+        item.style.left = `${10 + Math.random() * 75}%`;
+        item.style.top = `${10 + Math.random() * 75}%`;
+        item.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+        item.addEventListener('pointerdown', (e) => {
+          if (item.classList.contains('counted')) return;
+          item.classList.add('counted');
+          this.currentCount++;
+          
+          this.services.sound.playPop();
+          this.services.confetti.burst(e.clientX, e.clientY, 8);
+          this.services.speech.speak(`${this.currentCount}`);
+          
+          content.querySelector('#m-count-badge').innerText = `${this.currentCount} / ${this.targetCount}`;
+
+          if (this.currentCount === this.targetCount) {
+            this.addTimeout(() => {
+              this.services.sound.playSuccess();
+              const rect = board.getBoundingClientRect();
+              this.services.confetti.burst(rect.left + rect.width / 2, rect.top + rect.height / 2, 50);
+              this.services.speech.speak(`Fantastic! You counted all ${this.targetCount} items!`);
+              
+              if (window.app) {
+                window.app.showVoiceBubble(`Super Counter! Counted ${this.targetCount}! 🌟`);
+              }
+              this.addTimeout(() => this.loadMode(), 3000);
+            }, 500);
+          }
+        });
+
+        board.appendChild(item);
+      }
+    } else {
+      this.services.speech.speak("Addition and subtraction! Let's solve the visual math puzzle.");
+      this.solved = false;
+      this.generateMathProblem();
+
+      content.innerHTML = `
+        <div style="flex: 1; display:flex; justify-content:center; align-items:center; width:100%;">
+          <div class="math-formula-container">
+            <div class="math-group" id="math-group-a"></div>
+            <div class="math-operator" id="math-op-symbol">+</div>
+            <div class="math-group" id="math-group-b"></div>
+            <div class="math-operator">=</div>
+            <div class="math-question-bubble" id="math-ans-bubble">?</div>
+          </div>
+        </div>
+        <div class="math-choices" id="math-choices"></div>
+      `;
+
+      this.renderArithmeticVisuals();
+    }
+  }
+
+  generateMathProblem() {
+    const isAddition = Math.random() < 0.5;
+    const emojis = ["🍎", "⭐", "🥕", "🐠", "🐞"];
+    const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+
+    if (isAddition) {
+      const a = Math.floor(Math.random() * 5) + 1;
+      const b = Math.floor(Math.random() * 5) + 1;
+      this.mathProblem = { type: 'add', a, b, answer: a + b, emoji };
+    } else {
+      const a = Math.floor(Math.random() * 6) + 3;
+      const b = Math.floor(Math.random() * (a - 1)) + 1;
+      this.mathProblem = { type: 'sub', a, b, answer: a - b, emoji };
+    }
+  }
+
+  renderArithmeticVisuals() {
+    const content = this.container.querySelector('#math-content');
+    const groupA = content.querySelector('#math-group-a');
+    const opSymbol = content.querySelector('#math-op-symbol');
+    const groupB = content.querySelector('#math-group-b');
+    const choicesContainer = content.querySelector('#math-choices');
+
+    const prob = this.mathProblem;
+    groupA.innerHTML = '';
+    groupB.innerHTML = '';
+    choicesContainer.innerHTML = '';
+
+    for (let i = 0; i < prob.a; i++) {
+      const item = document.createElement('span');
+      item.className = 'math-group-item';
+      item.innerText = prob.emoji;
+      
+      item.addEventListener('pointerdown', (e) => {
+        this.services.sound.playPop();
+        item.style.transform = 'scale(1.3)';
+        setTimeout(() => item.style.transform = 'scale(1)', 150);
+        this.services.confetti.burst(e.clientX, e.clientY, 3);
+      });
+      
+      groupA.appendChild(item);
+    }
+
+    if (prob.type === 'add') {
+      opSymbol.innerText = '+';
+      for (let i = 0; i < prob.b; i++) {
+        const item = document.createElement('span');
+        item.className = 'math-group-item';
+        item.innerText = prob.emoji;
+        
+        item.addEventListener('pointerdown', (e) => {
+          this.services.sound.playPop();
+          item.style.transform = 'scale(1.3)';
+          setTimeout(() => item.style.transform = 'scale(1)', 150);
+          this.services.confetti.burst(e.clientX, e.clientY, 3);
+        });
+
+        groupB.appendChild(item);
+      }
+    } else {
+      opSymbol.innerText = '-';
+      for (let i = 0; i < prob.b; i++) {
+        const item = document.createElement('span');
+        item.className = 'math-group-item subtracted';
+        item.innerText = prob.emoji;
+        groupB.appendChild(item);
+      }
+
+      const itemsA = groupA.querySelectorAll('.math-group-item');
+      for (let i = 0; i < prob.b; i++) {
+        if (itemsA[itemsA.length - 1 - i]) {
+          itemsA[itemsA.length - 1 - i].classList.add('subtracted');
+        }
+      }
+    }
+
+    const correct = prob.answer;
+    const candidates = [correct];
+    while (candidates.length < 3) {
+      const rand = Math.floor(Math.random() * 10) + 1;
+      if (!candidates.includes(rand)) {
+        candidates.push(rand);
+      }
+    }
+    candidates.sort(() => Math.random() - 0.5);
+
+    candidates.forEach(num => {
+      const btn = document.createElement('button');
+      btn.className = 'math-choice-btn';
+      btn.innerText = num;
+      
+      btn.addEventListener('pointerdown', () => this.checkArithmeticAnswer(num, btn));
+      choicesContainer.appendChild(btn);
+    });
+
+    const actionText = prob.type === 'add' ? `plus` : `minus`;
+    this.services.speech.speak(`How much is ${prob.a} ${actionText} ${prob.b}? Count the items!`);
+  }
+
+  checkArithmeticAnswer(num, btn) {
+    if (this.solved) return;
+    const prob = this.mathProblem;
+
+    if (num === prob.answer) {
+      this.solved = true;
+      btn.classList.add('correct');
+      this.services.sound.playSuccess();
+      
+      const bubble = this.container.querySelector('#math-ans-bubble');
+      bubble.innerText = num;
+      bubble.classList.add('correct');
+
+      const rect = btn.getBoundingClientRect();
+      this.services.confetti.burst(rect.left + rect.width / 2, rect.top + rect.height / 2, 25);
+
+      const actionText = prob.type === 'add' ? `plus` : `minus`;
+      this.services.speech.speak(`Yes! ${prob.a} ${actionText} ${prob.b} equals ${prob.answer}!`);
+
+      if (window.app) {
+        window.app.showVoiceBubble(`Super Math Whiz! ➕⭐`);
+      }
+
+      this.addTimeout(() => this.loadMode(), 2500);
+    } else {
+      btn.classList.add('incorrect');
+      this.services.sound.playBoing();
+      this.services.speech.speak(`Try again!`);
+      
+      btn.style.animation = 'none';
+      btn.offsetHeight;
+      btn.style.animation = 'shake 0.3s ease';
+      
+      this.addTimeout(() => {
+        btn.classList.remove('incorrect');
+      }, 500);
+    }
+  }
+
+  cleanup() {
+    super.cleanup();
+  }
+}
+
 // Game 18: Teddy Dress-Up
 class GameTeddyDressUp extends MiniGame {
   start() {
@@ -3778,7 +4031,8 @@ const GAME_REGISTRY = {
   rocketlander: { title: "Rocket Lander", icon: "🚀", cat: "action", gameClass: GameRocketLander },
   icecreamstack: { title: "Ice Cream Stack", icon: "🍦", cat: "action", gameClass: GameIceCreamStack },
   underseabubbles: { title: "Undersea Pop", icon: "🫧", cat: "action", gameClass: GameUnderseaBubbles },
-  phonics: { title: "Phonics Match", icon: "🍎", cat: "puzzle", gameClass: GamePhonicsMatcher }
+  phonics: { title: "Phonics Match", icon: "🍎", cat: "puzzle", gameClass: GamePhonicsMatcher },
+  mathexplorer: { title: "Math Explorer", icon: "🔢", cat: "puzzle", gameClass: GameMathExplorer }
 };
 
 class GameManager {
