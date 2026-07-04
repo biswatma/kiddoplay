@@ -1,4 +1,4 @@
-const CACHE_NAME = 'playzone-v2';
+const CACHE_NAME = 'playzone-v3';
 const ASSETS = [
   './',
   './index.html',

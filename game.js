@@ -4139,6 +4139,7 @@ class GameManager {
     this.lobbyView.classList.add('hidden');
     this.gameViewport.classList.remove('game-viewport-hide');
     this.gameViewport.classList.remove('hidden');
+    this.voiceBubble.classList.add('hidden');
 
     document.getElementById('active-game-title').innerText = `${game.icon} ${game.title}`;
 
