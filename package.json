@@ -1,0 +1,12 @@
+{
+  "name": "face-puzzle",
+  "version": "1.0.0",
+  "description": "A toddler-friendly face building puzzle game.",
+  "scripts": {
+    "dev": "npx -y http-server -p 3000"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Kids Play Zone! 🎈🧸🎨 20 Fun Games</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-wrapper">
+    <!-- Shared Header -->
+    <header class="game-header">
+      <div class="header-logo" id="header-logo">
+        <span class="logo-emoji">🧸</span>
+        <h1>Kids Play Zone</h1>
+      </div>
+      <div class="header-controls">
+        <button id="btn-sound" class="icon-btn sound-on" title="Sound On/Off">
+          <span class="sound-icon">🔊</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Lobby View -->
+    <section id="lobby-view" class="lobby-view">
+      <div class="lobby-welcome">
+        <h2>Choose a Game to Play! 🌟</h2>
+        <div class="category-filters">
+          <button class="filter-btn active" data-filter="all">All Games</button>
+          <button class="filter-btn" data-filter="puzzle">🧩 Puzzles</button>
+          <button class="filter-btn" data-filter="music">🎵 Sounds & Music</button>
+          <button class="filter-btn" data-filter="action">⚡ Action & Tap</button>
+          <button class="filter-btn" data-filter="creative">🎨 Creative</button>
+        </div>
+      </div>
+      
+      <div class="games-grid" id="games-grid">
+        <!-- 20 Game cards loaded here dynamically by JS -->
+      </div>
+    </section>
+
+    <!-- Active Game Viewport (Hidden initially) -->
+    <section id="game-viewport" class="game-viewport hidden">
+      <div class="viewport-header">
+        <button id="btn-back" class="back-btn">
+          <span class="back-icon">🏠</span> Back to Games
+        </button>
+        <h2 id="active-game-title">Game Title</h2>
+      </div>
+
+      <div class="viewport-body">
+        <div id="active-game-container" class="active-game-container">
+          <!-- Active game renders here -->
+        </div>
+        
+        <!-- Voice bubble visual prompt for toddlers -->
+        <div id="voice-bubble" class="voice-bubble hidden">
+          <span class="bubble-text">Let's play!</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Shared Confetti / Particle effect overlay -->
+    <canvas id="effects-canvas" class="effects-canvas"></canvas>
+  </div>
+
+  <!-- Audio Context Initializer Overlay (Required for auto-playing audio block in modern browsers) -->
+  <div id="start-overlay" class="start-overlay">
+    <div class="start-card">
+      <span class="card-emoji">🎈🤖🦖🎨</span>
+      <h1>Ready to Enter the Play Zone?</h1>
+      <p>Enjoy 20 interactive mini-games with funny speech and sound effects!</p>
+      <button id="btn-start-game" class="start-game-btn">Let's Play! ▶</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
