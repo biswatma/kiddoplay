@@ -1547,52 +1547,331 @@ class GameFruitCatcher extends MiniGame {
   }
 }
 
-// Game 9: Dino Coloring Book
+const COLORING_ANIMALS = {
+  dino: {
+    name: "Dinosaur",
+    emoji: "🦖",
+    svg: `
+      <svg viewBox="0 0 200 200" class="coloring-outline-svg">
+        <!-- Dino Tail -->
+        <path d="M 50 130 Q 15 150 10 110 Q 25 100 50 110 Z" fill="none" stroke="#2d2d2d" stroke-width="5" stroke-linejoin="round" />
+        <!-- Dino Feet -->
+        <rect x="70" y="140" width="22" height="30" rx="10" fill="none" stroke="#2d2d2d" stroke-width="5" />
+        <rect x="110" y="140" width="22" height="30" rx="10" fill="none" stroke="#2d2d2d" stroke-width="5" />
+        <!-- Dino Body -->
+        <path d="M 50 120 C 50 80, 70 60, 100 60 C 130 60, 150 80, 150 120 C 150 150, 50 150, 50 120 Z" fill="none" stroke="#2d2d2d" stroke-width="5" stroke-linejoin="round" />
+        <!-- Dino Neck & Head -->
+        <path d="M 120 70 L 150 20 Q 185 25 180 50 L 140 90 Z" fill="none" stroke="#2d2d2d" stroke-width="5" stroke-linejoin="round" />
+        <!-- Dino Plates/Spikes -->
+        <polygon points="80,60 90,45 100,60" fill="none" stroke="#2d2d2d" stroke-width="4" />
+        <polygon points="110,60 120,45 130,60" fill="none" stroke="#2d2d2d" stroke-width="4" />
+        <!-- Dino Eye -->
+        <circle cx="160" cy="35" r="4" fill="#2d2d2d" />
+        <!-- Cute Cheek -->
+        <circle cx="168" cy="44" r="6" fill="#ffb5a7" opacity="0.6" />
+      </svg>
+    `
+  },
+  bear: {
+    name: "Teddy Bear",
+    emoji: "🧸",
+    svg: `
+      <svg viewBox="0 0 200 200" class="coloring-outline-svg">
+        <!-- Ears -->
+        <circle cx="60" cy="55" r="22" fill="none" stroke="#2d2d2d" stroke-width="5" />
+        <circle cx="60" cy="55" r="12" fill="none" stroke="#2d2d2d" stroke-width="3" />
+        <circle cx="140" cy="55" r="22" fill="none" stroke="#2d2d2d" stroke-width="5" />
+        <circle cx="140" cy="55" r="12" fill="none" stroke="#2d2d2d" stroke-width="3" />
+        <!-- Arms -->
+        <circle cx="45" cy="120" r="18" fill="none" stroke="#2d2d2d" stroke-width="5" />
+        <circle cx="155" cy="120" r="18" fill="none" stroke="#2d2d2d" stroke-width="5" />
+        <!-- Feet -->
+        <circle cx="65" cy="165" r="22" fill="none" stroke="#2d2d2d" stroke-width="5" />
+        <circle cx="135" cy="165" r="22" fill="none" stroke="#2d2d2d" stroke-width="5" />
+        <!-- Body -->
+        <circle cx="100" cy="125" r="45" fill="none" stroke="#2d2d2d" stroke-width="5" />
+        <circle cx="100" cy="125" r="30" fill="none" stroke="#2d2d2d" stroke-width="3" />
+        <!-- Head -->
+        <circle cx="100" cy="85" r="40" fill="none" stroke="#2d2d2d" stroke-width="5" />
+        <!-- Snout -->
+        <ellipse cx="100" cy="94" rx="14" ry="10" fill="none" stroke="#2d2d2d" stroke-width="3" />
+        <polygon points="95,90 105,90 100,95" fill="#2d2d2d" />
+        <!-- Eyes -->
+        <circle cx="85" cy="80" r="5" fill="#2d2d2d" />
+        <circle cx="115" cy="80" r="5" fill="#2d2d2d" />
+        <!-- Cheeks -->
+        <circle cx="75" cy="88" r="6" fill="#ffb5a7" opacity="0.6" />
+        <circle cx="125" cy="88" r="6" fill="#ffb5a7" opacity="0.6" />
+      </svg>
+    `
+  },
+  cat: {
+    name: "Cute Cat",
+    emoji: "🐱",
+    svg: `
+      <svg viewBox="0 0 200 200" class="coloring-outline-svg">
+        <!-- Ears -->
+        <path d="M 30 70 L 20 20 L 70 50 Z" fill="none" stroke="#2d2d2d" stroke-width="5" stroke-linejoin="round" />
+        <path d="M 170 70 L 180 20 L 130 50 Z" fill="none" stroke="#2d2d2d" stroke-width="5" stroke-linejoin="round" />
+        <!-- Body -->
+        <ellipse cx="100" cy="140" rx="45" ry="35" fill="none" stroke="#2d2d2d" stroke-width="5" />
+        <!-- Head -->
+        <ellipse cx="100" cy="95" rx="65" ry="50" fill="none" stroke="#2d2d2d" stroke-width="5" />
+        <!-- Eyes -->
+        <circle cx="75" cy="85" r="6" fill="#2d2d2d" />
+        <circle cx="125" cy="85" r="6" fill="#2d2d2d" />
+        <!-- Whiskers -->
+        <line x1="45" y1="105" x2="15" y2="100" stroke="#2d2d2d" stroke-width="3" />
+        <line x1="45" y1="112" x2="12" y2="112" stroke="#2d2d2d" stroke-width="3" />
+        <line x1="155" y1="105" x2="185" y2="100" stroke="#2d2d2d" stroke-width="3" />
+        <line x1="155" y1="112" x2="188" y2="112" stroke="#2d2d2d" stroke-width="3" />
+        <!-- Nose and mouth -->
+        <polygon points="95,100 105,100 100,105" fill="#2d2d2d" />
+        <path d="M 92 112 Q 100 120 100 112 Q 100 120 108 112" fill="none" stroke="#2d2d2d" stroke-width="3" />
+      </svg>
+    `
+  },
+  fish: {
+    name: "Playful Fish",
+    emoji: "🐠",
+    svg: `
+      <svg viewBox="0 0 200 200" class="coloring-outline-svg">
+        <!-- Tail Fin -->
+        <path d="M 45 100 L 15 65 L 25 100 L 15 135 Z" fill="none" stroke="#2d2d2d" stroke-width="5" stroke-linejoin="round" />
+        <!-- Fins -->
+        <path d="M 110 62 Q 130 35 150 65" fill="none" stroke="#2d2d2d" stroke-width="5" stroke-linejoin="round" />
+        <path d="M 110 138 Q 130 165 150 135" fill="none" stroke="#2d2d2d" stroke-width="5" stroke-linejoin="round" />
+        <!-- Body -->
+        <path d="M 45 100 C 70 60, 140 60, 175 100 C 140 140, 70 140, 45 100 Z" fill="none" stroke="#2d2d2d" stroke-width="5" stroke-linejoin="round" />
+        <!-- Eye -->
+        <circle cx="145" cy="90" r="6" fill="#2d2d2d" />
+        <!-- Mouth -->
+        <path d="M 175 100 C 168 103, 168 97, 175 100" fill="none" stroke="#2d2d2d" stroke-width="4" />
+        <!-- Scale details -->
+        <path d="M 90 85 Q 98 100 90 115" fill="none" stroke="#2d2d2d" stroke-width="3" />
+        <path d="M 115 80 Q 123 100 115 120" fill="none" stroke="#2d2d2d" stroke-width="3" />
+      </svg>
+    `
+  }
+};
+
 class GameColoringBook extends MiniGame {
   start() {
+    this.activeAnimal = 'dino';
+    this.activeColor = '#ff595e';
+    this.isEraser = false;
+    this.brushSize = 14;
+    this.isDrawing = false;
+    this.lastX = 0;
+    this.lastY = 0;
+
     this.container.innerHTML = `
       <div class="coloring-layout">
-        <div class="coloring-canvas-container" id="cb-canvas">
-          ${ASSETS.dino}
+        <div class="coloring-header" id="cb-header"></div>
+        <div class="coloring-board-outer">
+          <div class="coloring-board" id="cb-board">
+            <canvas class="coloring-canvas" id="cb-canvas"></canvas>
+            <div id="cb-outline-container"></div>
+          </div>
+          <div class="coloring-toolbox">
+            <button class="coloring-tool-btn active" id="cb-brush-btn" title="Pencil Color">✏️</button>
+            <button class="coloring-tool-btn" id="cb-eraser-btn" title="Eraser">🧽</button>
+            <button class="coloring-tool-btn" id="cb-size-btn" title="Brush Size">🔘</button>
+            <button class="coloring-tool-btn" id="cb-clear-btn" style="margin-top:12px;" title="Clear Screen">🗑️</button>
+            <button class="coloring-tool-btn" id="cb-done-btn" style="background:#00f5d4;" title="Ta-da!">🎉</button>
+          </div>
         </div>
-        <div class="color-palette" id="cb-palette">
-          <div class="color-swatch active" style="background:#ff595e;" data-color="#ff595e"></div>
-          <div class="color-swatch" style="background:#ff9f1c;" data-color="#ff9f1c"></div>
-          <div class="color-swatch" style="background:#fee440;" data-color="#fee440"></div>
-          <div class="color-swatch" style="background:#00f5d4;" data-color="#00f5d4"></div>
-          <div class="color-swatch" style="background:#00bbf9;" data-color="#00bbf9"></div>
-          <div class="color-swatch" style="background:#9b5de5;" data-color="#9b5de5"></div>
-          <div class="color-swatch" style="background:#f15bb5;" data-color="#f15bb5"></div>
-        </div>
+        <div class="coloring-pencils-container" id="cb-pencils"></div>
       </div>
     `;
 
-    this.activeColor = '#ff595e';
-    this.services.speech.speak("Tap a color, then tap parts of the dinosaur to color it!");
+    this.board = this.container.querySelector('#cb-board');
+    this.canvas = this.container.querySelector('#cb-canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.outlineContainer = this.container.querySelector('#cb-outline-container');
 
-    // Swatch selectors
-    this.container.querySelectorAll('.color-swatch').forEach(sw => {
-      sw.addEventListener('click', () => {
-        this.container.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-        sw.classList.add('active');
-        this.activeColor = sw.getAttribute('data-color');
-        this.services.sound.playPop();
-      });
+    // Drawing listeners (iPad unified touch/pointer support)
+    this.canvas.addEventListener('pointerdown', (e) => this.drawStart(e));
+    this.canvas.addEventListener('pointermove', (e) => this.drawMove(e));
+    this.canvas.addEventListener('pointerup', () => this.drawEnd());
+    this.canvas.addEventListener('pointercancel', () => this.drawEnd());
+
+    // Switch tool listeners
+    this.container.querySelector('#cb-brush-btn').addEventListener('click', () => {
+      this.isEraser = false;
+      this.container.querySelector('#cb-brush-btn').classList.add('active');
+      this.container.querySelector('#cb-eraser-btn').classList.remove('active');
+      this.services.sound.playPop();
     });
 
-    // Dino parts clicks
-    const parts = ['part-tail', 'part-foot1', 'part-foot2', 'part-body', 'part-head', 'part-spike1', 'part-spike2'];
-    parts.forEach(pid => {
-      const path = this.container.querySelector(`#${pid}`);
-      if (path) {
-        path.style.cursor = 'pointer';
-        path.addEventListener('pointerdown', (e) => {
-          path.setAttribute('fill', this.activeColor);
-          this.services.sound.playSnap();
-          this.services.confetti.burst(e.clientX, e.clientY, 8);
-        });
+    this.container.querySelector('#cb-eraser-btn').addEventListener('click', () => {
+      this.isEraser = true;
+      this.container.querySelector('#cb-brush-btn').classList.remove('active');
+      this.container.querySelector('#cb-eraser-btn').classList.add('active');
+      this.services.sound.playPop();
+    });
+
+    this.container.querySelector('#cb-size-btn').addEventListener('click', () => {
+      if (this.brushSize === 8) this.brushSize = 14;
+      else if (this.brushSize === 14) this.brushSize = 24;
+      else this.brushSize = 8;
+      
+      this.services.sound.playPop();
+      const rect = this.container.querySelector('#cb-size-btn');
+      rect.style.transform = 'scale(1.2)';
+      setTimeout(() => rect.style.transform = 'scale(1)', 150);
+      
+      const label = this.brushSize === 8 ? "thin pencil" : this.brushSize === 14 ? "medium marker" : "thick crayon";
+      this.services.speech.speak(`Switched to ${label}`);
+    });
+
+    this.container.querySelector('#cb-clear-btn').addEventListener('click', () => {
+      this.ctx.clearRect(0, 0, this.canvas.width / (window.devicePixelRatio || 1), this.canvas.height / (window.devicePixelRatio || 1));
+      this.services.sound.playReset();
+    });
+
+    this.container.querySelector('#cb-done-btn').addEventListener('click', (e) => {
+      this.services.sound.playSuccess();
+      this.services.confetti.burst(e.clientX, e.clientY, 40);
+      this.services.speech.speak("Wow! Your drawing is so beautiful! Perfect coloring!");
+      if (window.app) {
+        window.app.showVoiceBubble("Beautiful coloring! 🎨✨");
       }
     });
+
+    // Resize observer
+    const resizeObserver = new ResizeObserver(() => this.resizeCanvas());
+    resizeObserver.observe(this.board);
+
+    this.renderHeader();
+    this.renderPencils();
+    this.loadAnimal();
+  }
+
+  resizeCanvas() {
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = this.canvas.width;
+    tempCanvas.height = this.canvas.height;
+    const tempCtx = tempCanvas.getContext('2d');
+    tempCtx.drawImage(this.canvas, 0, 0);
+
+    const rect = this.board.getBoundingClientRect();
+    this.canvas.width = rect.width * (window.devicePixelRatio || 1);
+    this.canvas.height = rect.height * (window.devicePixelRatio || 1);
+    this.ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+    
+    this.ctx.drawImage(tempCanvas, 0, 0, rect.width, rect.height);
+  }
+
+  renderHeader() {
+    const header = this.container.querySelector('#cb-header');
+    header.innerHTML = '';
+    for (const [key, val] of Object.entries(COLORING_ANIMALS)) {
+      const btn = document.createElement('button');
+      btn.className = `coloring-animal-btn ${key === this.activeAnimal ? 'active' : ''}`;
+      btn.innerHTML = `${val.emoji} ${val.name}`;
+      btn.addEventListener('click', () => {
+        header.querySelectorAll('.coloring-animal-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.activeAnimal = key;
+        this.services.sound.playPop();
+        this.loadAnimal();
+      });
+      header.appendChild(btn);
+    }
+  }
+
+  renderPencils() {
+    const palette = this.container.querySelector('#cb-pencils');
+    palette.innerHTML = '';
+    const colors = [
+      '#ff595e', // red
+      '#ff9f1c', // orange
+      '#fee440', // yellow
+      '#00f5d4', // green
+      '#00bbf9', // blue
+      '#9b5de5', // purple
+      '#f15bb5', // pink
+      '#8B5A2B', // brown
+      '#2d2d2d'  // black
+    ];
+
+    colors.forEach(color => {
+      const pencil = document.createElement('div');
+      pencil.className = `coloring-pencil ${color === this.activeColor && !this.isEraser ? 'active' : ''}`;
+      pencil.style.setProperty('--pencil-color', color);
+      
+      const body = document.createElement('div');
+      body.className = 'coloring-pencil-body';
+      pencil.appendChild(body);
+
+      pencil.addEventListener('click', () => {
+        this.isEraser = false;
+        this.activeColor = color;
+        
+        this.container.querySelectorAll('.coloring-pencil').forEach(p => p.classList.remove('active'));
+        pencil.classList.add('active');
+        this.container.querySelector('#cb-brush-btn').classList.add('active');
+        this.container.querySelector('#cb-eraser-btn').classList.remove('active');
+        
+        this.services.sound.playPop();
+      });
+
+      palette.appendChild(pencil);
+    });
+  }
+
+  loadAnimal() {
+    const animal = COLORING_ANIMALS[this.activeAnimal];
+    this.outlineContainer.innerHTML = animal.svg;
+    this.ctx.clearRect(0, 0, this.canvas.width / (window.devicePixelRatio || 1), this.canvas.height / (window.devicePixelRatio || 1));
+    this.services.speech.speak(`Let's color the ${animal.name}! Choose a colored pencil.`);
+  }
+
+  drawStart(e) {
+    e.preventDefault();
+    this.isDrawing = true;
+    const rect = this.canvas.getBoundingClientRect();
+    this.lastX = e.clientX - rect.left;
+    this.lastY = e.clientY - rect.top;
+    
+    this.ctx.lineCap = 'round';
+    this.ctx.lineJoin = 'round';
+    this.ctx.lineWidth = this.brushSize;
+    if (this.isEraser) {
+      this.ctx.globalCompositeOperation = 'destination-out';
+    } else {
+      this.ctx.globalCompositeOperation = 'source-over';
+      this.ctx.strokeStyle = this.activeColor;
+    }
+    
+    this.ctx.beginPath();
+    this.ctx.moveTo(this.lastX, this.lastY);
+    this.ctx.lineTo(this.lastX, this.lastY);
+    this.ctx.stroke();
+
+    this.services.sound.playPop();
+  }
+
+  drawMove(e) {
+    e.preventDefault();
+    if (!this.isDrawing) return;
+
+    const rect = this.canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(this.lastX, this.lastY);
+    this.ctx.lineTo(x, y);
+    this.ctx.stroke();
+
+    this.lastX = x;
+    this.lastY = y;
+  }
+
+  drawEnd() {
+    this.isDrawing = false;
   }
 }
 
@@ -1964,56 +2243,572 @@ class GameFishTank extends MiniGame {
 }
 
 // Game 17: Letter Tracer
+const MONTESSORI_DATA = {
+  letters: {
+    A: {
+      type: 'vowel',
+      text: 'A',
+      strokes: [
+        [{x: 50, y: 18}, {x: 37, y: 49}, {x: 25, y: 80}],
+        [{x: 50, y: 18}, {x: 63, y: 49}, {x: 75, y: 80}],
+        [{x: 35, y: 52}, {x: 50, y: 52}, {x: 65, y: 52}]
+      ]
+    },
+    B: {
+      type: 'consonant',
+      text: 'B',
+      strokes: [
+        [{x: 35, y: 18}, {x: 35, y: 50}, {x: 35, y: 82}],
+        [{x: 35, y: 18}, {x: 55, y: 18}, {x: 64, y: 25}, {x: 64, y: 39}, {x: 55, y: 48}, {x: 35, y: 48}],
+        [{x: 35, y: 48}, {x: 58, y: 48}, {x: 68, y: 56}, {x: 68, y: 74}, {x: 58, y: 82}, {x: 35, y: 82}]
+      ]
+    },
+    C: {
+      type: 'consonant',
+      text: 'C',
+      strokes: [
+        [{x: 68, y: 25}, {x: 52, y: 18}, {x: 34, y: 30}, {x: 30, y: 50}, {x: 34, y: 70}, {x: 52, y: 82}, {x: 68, y: 75}]
+      ]
+    },
+    D: {
+      type: 'consonant',
+      text: 'D',
+      strokes: [
+        [{x: 35, y: 18}, {x: 35, y: 50}, {x: 35, y: 82}],
+        [{x: 35, y: 18}, {x: 58, y: 18}, {x: 70, y: 32}, {x: 70, y: 50}, {x: 70, y: 68}, {x: 58, y: 82}, {x: 35, y: 82}]
+      ]
+    },
+    E: {
+      type: 'vowel',
+      text: 'E',
+      strokes: [
+        [{x: 32, y: 18}, {x: 32, y: 50}, {x: 32, y: 82}],
+        [{x: 32, y: 18}, {x: 65, y: 18}],
+        [{x: 32, y: 50}, {x: 58, y: 50}],
+        [{x: 32, y: 82}, {x: 65, y: 82}]
+      ]
+    }
+  },
+  numbers: {
+    1: {
+      type: 'number',
+      text: '1',
+      strokes: [
+        [{x: 38, y: 30}, {x: 50, y: 18}],
+        [{x: 50, y: 18}, {x: 50, y: 82}],
+        [{x: 35, y: 82}, {x: 65, y: 82}]
+      ]
+    },
+    2: {
+      type: 'number',
+      text: '2',
+      strokes: [
+        [{x: 32, y: 30}, {x: 40, y: 18}, {x: 60, y: 18}, {x: 68, y: 30}, {x: 68, y: 42}, {x: 32, y: 82}, {x: 68, y: 82}]
+      ]
+    },
+    3: {
+      type: 'number',
+      text: '3',
+      strokes: [
+        [{x: 32, y: 25}, {x: 50, y: 18}, {x: 65, y: 28}, {x: 50, y: 46}, {x: 38, y: 46}],
+        [{x: 50, y: 46}, {x: 68, y: 60}, {x: 65, y: 76}, {x: 50, y: 82}, {x: 32, y: 75}]
+      ]
+    },
+    4: {
+      type: 'number',
+      text: '4',
+      strokes: [
+        [{x: 55, y: 18}, {x: 40, y: 40}, {x: 25, y: 60}, {x: 50, y: 60}, {x: 75, y: 60}],
+        [{x: 55, y: 40}, {x: 55, y: 82}]
+      ]
+    },
+    5: {
+      type: 'number',
+      text: '5',
+      strokes: [
+        [{x: 60, y: 18}, {x: 35, y: 18}, {x: 35, y: 46}],
+        [{x: 35, y: 46}, {x: 58, y: 46}, {x: 68, y: 58}, {x: 58, y: 82}, {x: 35, y: 82}]
+      ]
+    }
+  },
+  shapes: {
+    circle: {
+      type: 'shape',
+      text: '○',
+      strokes: [
+        [{x: 50, y: 18}, {x: 75, y: 24}, {x: 82, y: 50}, {x: 75, y: 76}, {x: 50, y: 82}, {x: 25, y: 76}, {x: 18, y: 50}, {x: 25, y: 24}, {x: 50, y: 18}]
+      ]
+    },
+    triangle: {
+      type: 'shape',
+      text: '△',
+      strokes: [
+        [{x: 50, y: 18}, {x: 18, y: 80}, {x: 82, y: 80}, {x: 50, y: 18}]
+      ]
+    },
+    star: {
+      type: 'shape',
+      text: '☆',
+      strokes: [
+        [{x: 50, y: 12}, {x: 61, y: 39}, {x: 90, y: 39}, {x: 66, y: 57}, {x: 75, y: 85}, {x: 50, y: 68}, {x: 25, y: 85}, {x: 34, y: 57}, {x: 10, y: 39}, {x: 39, y: 39}, {x: 50, y: 12}]
+      ]
+    }
+  }
+};
+
 class GameLetterTracer extends MiniGame {
   start() {
+    this.activeTab = 'letters';
+    this.activeItem = 'A';
+    
+    this.currentStrokeIndex = 0;
+    this.currentCheckpointIndex = 0;
+    this.completedStrokesPaths = [];
+    this.activeStrokePoints = [];
+    this.tracing = false;
+
     this.container.innerHTML = `
-      <div class="tracer-layout" id="tr-layout">
-        <div class="tracer-letter-bg">A</div>
-        <canvas class="tracer-canvas" id="tr-canvas"></canvas>
+      <div class="montessori-layout">
+        <div class="montessori-board-outer">
+          <div class="montessori-board" id="mt-board">
+            <svg class="montessori-path-svg" id="mt-svg" viewBox="0 0 100 100"></svg>
+            <canvas class="montessori-canvas" id="mt-canvas"></canvas>
+            <div class="montessori-start-dot" id="mt-start-dot" style="display: none;"></div>
+            <div class="montessori-alert" id="mt-alert">✏️ Stay on the line!</div>
+          </div>
+        </div>
+        <div class="montessori-drawer">
+          <div class="montessori-tabs">
+            <button class="montessori-tab-btn active" data-tab="letters">ABC Letters</button>
+            <button class="montessori-tab-btn" data-tab="numbers">123 Numbers</button>
+            <button class="montessori-tab-btn" data-tab="shapes">Shapes</button>
+          </div>
+          <div class="montessori-items-tray" id="mt-tray"></div>
+        </div>
       </div>
     `;
 
-    this.services.speech.speak("Trace the letter A!");
+    this.board = this.container.querySelector('#mt-board');
+    this.svg = this.container.querySelector('#mt-svg');
+    this.canvas = this.container.querySelector('#mt-canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.startDot = this.container.querySelector('#mt-start-dot');
+    this.alertBubble = this.container.querySelector('#mt-alert');
 
-    const canvas = this.container.querySelector('#tr-canvas');
-    const ctx = canvas.getContext('2d');
+    // Bind tab clicks
+    this.container.querySelectorAll('.montessori-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.container.querySelectorAll('.montessori-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.activeTab = btn.getAttribute('data-tab');
+        this.services.sound.playPop();
+        
+        const keys = Object.keys(MONTESSORI_DATA[this.activeTab]);
+        this.activeItem = keys[0];
+        
+        this.renderTray();
+        this.loadItem();
+      });
+    });
+
+    // Touch/pointer events on canvas (full iPad touch compatibility)
+    this.canvas.addEventListener('pointerdown', (e) => this.handlePointerDown(e));
+    this.canvas.addEventListener('pointermove', (e) => this.handlePointerMove(e));
+    this.canvas.addEventListener('pointerup', (e) => this.handlePointerUp(e));
+    this.canvas.addEventListener('pointercancel', (e) => this.handlePointerUp(e));
+
+    // Listen to resize
+    const resizeObserver = new ResizeObserver(() => this.resizeCanvas());
+    resizeObserver.observe(this.board);
+
+    this.renderTray();
+    this.loadItem();
+  }
+
+  resizeCanvas() {
+    const rect = this.canvas.getBoundingClientRect();
+    this.canvas.width = rect.width * (window.devicePixelRatio || 1);
+    this.canvas.height = rect.height * (window.devicePixelRatio || 1);
+    this.ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+    this.redrawAll();
+  }
+
+  renderTray() {
+    const tray = this.container.querySelector('#mt-tray');
+    tray.innerHTML = '';
+    const items = MONTESSORI_DATA[this.activeTab];
+    for (const [key, val] of Object.entries(items)) {
+      const card = document.createElement('div');
+      card.className = `montessori-item-card ${key === this.activeItem ? 'active' : ''}`;
+      card.innerText = key;
+      card.addEventListener('click', () => {
+        tray.querySelectorAll('.montessori-item-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        this.activeItem = key;
+        this.services.sound.playPop();
+        this.loadItem();
+      });
+      tray.appendChild(card);
+    }
+  }
+
+  loadItem() {
+    const data = MONTESSORI_DATA[this.activeTab][this.activeItem];
     
-    const resize = () => {
-      const rect = canvas.parentElement.getBoundingClientRect();
-      canvas.width = rect.width;
-      canvas.height = rect.height;
-      ctx.strokeStyle = '#9b5de5';
-      ctx.lineWidth = 12;
-      ctx.lineCap = 'round';
-    };
-    resize();
+    this.board.className = 'montessori-board';
+    if (data.type === 'vowel') this.board.classList.add('vowel-board');
+    else if (data.type === 'consonant') this.board.classList.add('consonant-board');
+    else if (data.type === 'number') this.board.classList.add('number-board');
+    else if (data.type === 'shape') this.board.classList.add('shape-board');
 
-    let drawing = false;
+    this.currentStrokeIndex = 0;
+    this.currentCheckpointIndex = 0;
+    this.completedStrokesPaths = [];
+    this.activeStrokePoints = [];
+    this.tracing = false;
+    this.alertBubble.classList.remove('visible');
 
-    const startDraw = (e) => {
-      drawing = true;
-      ctx.beginPath();
-      const rect = canvas.getBoundingClientRect();
-      ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+    this.buildGuidelinesSVG(data.strokes);
+
+    const label = this.activeTab === 'shapes' ? this.activeItem : `the ${data.type === 'vowel' ? 'vowel' : data.type === 'consonant' ? 'consonant' : 'number'} ${this.activeItem}`;
+    this.services.speech.speak(`Let's trace ${label}!`);
+
+    setTimeout(() => {
+      this.resizeCanvas();
+      this.updateStartDot();
+    }, 100);
+  }
+
+  buildGuidelinesSVG(strokes) {
+    this.svg.innerHTML = '';
+    strokes.forEach((stroke) => {
+      let pathD = '';
+      stroke.forEach((p, idx) => {
+        pathD += `${idx === 0 ? 'M' : 'L'} ${p.x} ${p.y} `;
+      });
+
+      const guidePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      guidePath.setAttribute('d', pathD);
+      guidePath.setAttribute('stroke', 'rgba(45,45,45,0.18)');
+      guidePath.setAttribute('stroke-width', '16');
+      guidePath.setAttribute('stroke-linecap', 'round');
+      guidePath.setAttribute('stroke-linejoin', 'round');
+      guidePath.setAttribute('fill', 'none');
+      this.svg.appendChild(guidePath);
+
+      const dashPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      dashPath.setAttribute('d', pathD);
+      dashPath.setAttribute('stroke', '#ffffff');
+      dashPath.setAttribute('stroke-width', '2');
+      dashPath.setAttribute('stroke-dasharray', '5,5');
+      dashPath.setAttribute('stroke-linecap', 'round');
+      dashPath.setAttribute('stroke-linejoin', 'round');
+      dashPath.setAttribute('fill', 'none');
+      this.svg.appendChild(dashPath);
+    });
+  }
+
+  updateStartDot() {
+    const data = MONTESSORI_DATA[this.activeTab][this.activeItem];
+    if (this.currentStrokeIndex < data.strokes.length) {
+      const stroke = data.strokes[this.currentStrokeIndex];
+      const startNode = stroke[0];
+      
+      const rect = this.canvas.getBoundingClientRect();
+      const x = (startNode.x / 100) * rect.width;
+      const y = (startNode.y / 100) * rect.height;
+      
+      this.startDot.style.left = `${x}px`;
+      this.startDot.style.top = `${y}px`;
+      this.startDot.style.display = 'block';
+    } else {
+      this.startDot.style.display = 'none';
+    }
+  }
+
+  getPointerCoords(e) {
+    const rect = this.canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    return { x, y, px: (x / rect.width) * 100, py: (y / rect.height) * 100 };
+  }
+
+  handlePointerDown(e) {
+    e.preventDefault();
+    if (this.tracing) return;
+
+    const data = MONTESSORI_DATA[this.activeTab][this.activeItem];
+    if (this.currentStrokeIndex >= data.strokes.length) return;
+
+    const coords = this.getPointerCoords(e);
+    const stroke = data.strokes[this.currentStrokeIndex];
+    const startNode = stroke[0];
+
+    const distToStart = Math.hypot(coords.px - startNode.x, coords.py - startNode.y);
+    if (distToStart < 12) {
+      this.tracing = true;
+      this.currentCheckpointIndex = 0;
+      this.activeStrokePoints = [{ x: coords.x, y: coords.y }];
       this.services.sound.playPop();
-    };
+      this.startDot.style.display = 'none';
+      this.alertBubble.classList.remove('visible');
+    } else {
+      this.services.sound.playBoing();
+      this.alertBubble.innerText = 'Start at the pulsing dot! 🟢';
+      this.alertBubble.classList.add('visible');
+      setTimeout(() => this.alertBubble.classList.remove('visible'), 2000);
+    }
+  }
 
-    const draw = (e) => {
-      if (!drawing) return;
-      const rect = canvas.getBoundingClientRect();
-      ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-      ctx.stroke();
-      if (Math.random() < 0.2) this.services.confetti.burst(e.clientX, e.clientY, 4);
-    };
+  handlePointerMove(e) {
+    e.preventDefault();
+    if (!this.tracing) return;
 
-    const stopDraw = () => {
-      drawing = false;
-      this.services.sound.playSnap();
-    };
+    const data = MONTESSORI_DATA[this.activeTab][this.activeItem];
+    const stroke = data.strokes[this.currentStrokeIndex];
+    const coords = this.getPointerCoords(e);
 
-    canvas.addEventListener('pointerdown', startDraw);
-    canvas.addEventListener('pointermove', draw);
-    canvas.addEventListener('pointerup', stopDraw);
+    const prevNode = stroke[this.currentCheckpointIndex];
+    const targetNode = stroke[this.currentCheckpointIndex + 1];
+
+    const distToSegment = this.getDistanceToSegment(coords.px, coords.py, prevNode, targetNode);
+    if (distToSegment > 15) {
+      this.tracing = false;
+      this.activeStrokePoints = [];
+      this.startDot.style.display = 'block';
+      this.services.sound.playBoing();
+      this.alertBubble.innerText = 'Stay on the line! ✏️';
+      this.alertBubble.classList.add('visible');
+      this.redrawAll();
+      return;
+    }
+
+    this.activeStrokePoints.push({ x: coords.x, y: coords.y });
+    this.drawActivePath();
+
+    if (Math.random() < 0.25) {
+      this.services.sound.playPop();
+      this.services.confetti.burst(e.clientX, e.clientY, 3);
+    }
+
+    const distToTarget = Math.hypot(coords.px - targetNode.x, coords.py - targetNode.y);
+    if (distToTarget < 10) {
+      this.currentCheckpointIndex++;
+      
+      if (this.currentCheckpointIndex >= stroke.length - 1) {
+        this.tracing = false;
+        this.services.sound.playSnap();
+        
+        this.completedStrokesPaths.push([...this.activeStrokePoints]);
+        this.activeStrokePoints = [];
+        this.currentStrokeIndex++;
+
+        const rect = this.canvas.getBoundingClientRect();
+        const endX = (targetNode.x / 100) * rect.width + rect.left;
+        const endY = (targetNode.y / 100) * rect.height + rect.top;
+        this.services.confetti.burst(endX, endY, 15);
+
+        if (this.currentStrokeIndex >= data.strokes.length) {
+          setTimeout(() => {
+            this.services.sound.playSuccess();
+            this.services.confetti.burst(rect.width / 2 + rect.left, rect.height / 2 + rect.top, 50);
+            this.services.speech.speak(`Wonderful! You traced ${this.activeItem}!`);
+            
+            if (window.app) {
+              window.app.showVoiceBubble(`Super Tracing! Traced ${this.activeItem}! 🌟`);
+            }
+          }, 300);
+        } else {
+          this.updateStartDot();
+        }
+      }
+    }
+  }
+
+  handlePointerUp(e) {
+    if (!this.tracing) return;
+    this.tracing = false;
+    this.activeStrokePoints = [];
+    this.updateStartDot();
+    this.redrawAll();
+  }
+
+  getDistanceToSegment(px, py, a, b) {
+    const l2 = (a.x - b.x) ** 2 + (a.y - b.y) ** 2;
+    if (l2 === 0) return Math.hypot(px - a.x, py - a.y);
+    let t = ((px - a.x) * (b.x - a.x) + (py - a.y) * (b.y - a.y)) / l2;
+    t = Math.max(0, Math.min(1, t));
+    return Math.hypot(px - (a.x + t * (b.x - a.x)), py - (a.y + t * (b.y - a.y)));
+  }
+
+  drawActivePath() {
+    if (this.activeStrokePoints.length < 2) return;
+    this.ctx.strokeStyle = '#9b5de5';
+    this.ctx.lineWidth = 14;
+    this.ctx.lineCap = 'round';
+    this.ctx.lineJoin = 'round';
+    this.ctx.beginPath();
+    this.ctx.moveTo(this.activeStrokePoints[0].x, this.activeStrokePoints[0].y);
+    for (let i = 1; i < this.activeStrokePoints.length; i++) {
+      this.ctx.lineTo(this.activeStrokePoints[i].x, this.activeStrokePoints[i].y);
+    }
+    this.ctx.stroke();
+  }
+
+  redrawAll() {
+    this.ctx.clearRect(0, 0, this.canvas.width / (window.devicePixelRatio || 1), this.canvas.height / (window.devicePixelRatio || 1));
+    
+    this.ctx.strokeStyle = '#4ea8de';
+    this.ctx.lineWidth = 14;
+    this.ctx.lineCap = 'round';
+    this.ctx.lineJoin = 'round';
+    
+    this.completedStrokesPaths.forEach((path) => {
+      if (path.length < 2) return;
+      this.ctx.beginPath();
+      this.ctx.moveTo(path[0].x, path[0].y);
+      for (let i = 1; i < path.length; i++) {
+        this.ctx.lineTo(path[i].x, path[i].y);
+      }
+      this.ctx.stroke();
+    });
+
+    this.drawActivePath();
+  }
+
+  cleanup() {
+    super.cleanup();
+  }
+}
+
+// Game 24: Phonics Matcher
+const PHONICS_CARDS = [
+  { emoji: "🍎", letter: "A", word: "Apple" },
+  { emoji: "🎈", letter: "B", word: "Balloon" },
+  { emoji: "🐱", letter: "C", word: "Cat" },
+  { emoji: "🐶", letter: "D", word: "Dog" },
+  { emoji: "🥚", letter: "E", word: "Egg" },
+  { emoji: "🐸", letter: "F", word: "Frog" },
+  { emoji: "🍇", letter: "G", word: "Grapes" },
+  { emoji: "🎩", letter: "H", word: "Hat" },
+  { emoji: "🍦", letter: "I", word: "Ice Cream" },
+  { emoji: "🚀", letter: "R", word: "Rocket" },
+  { emoji: "☀️", letter: "S", word: "Sun" },
+  { emoji: "🐢", letter: "T", word: "Turtle" }
+];
+
+class GamePhonicsMatcher extends MiniGame {
+  start() {
+    this.currentIndex = 0;
+    this.container.innerHTML = `
+      <div class="phonics-layout">
+        <div class="phonics-progress-bar">
+          <div class="phonics-progress-fill" id="ph-progress"></div>
+        </div>
+        <div class="phonics-card-outer">
+          <div class="phonics-card" id="ph-card">
+            <span class="phonics-emoji" id="ph-emoji">🍎</span>
+            <div class="phonics-word-label" id="ph-label">
+              <span class="missing-letter">?</span><span>pple</span>
+            </div>
+          </div>
+        </div>
+        <div class="phonics-choices" id="ph-choices"></div>
+      </div>
+    `;
+
+    this.card = this.container.querySelector('#ph-card');
+    this.emojiEl = this.container.querySelector('#ph-emoji');
+    this.labelEl = this.container.querySelector('#ph-label');
+    this.choicesEl = this.container.querySelector('#ph-choices');
+    this.progressEl = this.container.querySelector('#ph-progress');
+
+    this.shuffledCards = [...PHONICS_CARDS].sort(() => Math.random() - 0.5);
+
+    this.loadCard();
+  }
+
+  loadCard() {
+    if (this.currentIndex >= 5) {
+      this.services.sound.playSuccess();
+      const rect = this.card.getBoundingClientRect();
+      this.services.confetti.burst(rect.left + rect.width / 2, rect.top + rect.height / 2, 60);
+      this.services.speech.speak("Sensational work! You matched all the sounds!");
+      if (window.app) {
+        window.app.showVoiceBubble("Super Phonics Champ! 🌟🍎");
+      }
+      this.currentIndex = 0;
+      this.shuffledCards = [...PHONICS_CARDS].sort(() => Math.random() - 0.5);
+    }
+
+    const currentCard = this.shuffledCards[this.currentIndex];
+    this.emojiEl.innerText = currentCard.emoji;
+    
+    const remainder = currentCard.word.substring(1);
+    this.labelEl.innerHTML = `<span class="missing-letter">?</span><span>${remainder}</span>`;
+
+    this.progressEl.style.width = `${(this.currentIndex / 5) * 100}%`;
+
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const correctLetter = currentCard.letter;
+    
+    const candidates = [correctLetter];
+    while (candidates.length < 3) {
+      const randLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+      if (!candidates.includes(randLetter)) {
+        candidates.push(randLetter);
+      }
+    }
+    candidates.sort(() => Math.random() - 0.5);
+
+    this.choicesEl.innerHTML = '';
+    candidates.forEach(letter => {
+      const btn = document.createElement('button');
+      btn.className = 'phonics-choice-btn';
+      btn.innerText = letter;
+      
+      btn.addEventListener('pointerdown', () => this.checkChoice(letter, btn, currentCard));
+      this.choicesEl.appendChild(btn);
+    });
+
+    this.services.speech.speak(`What letter starts the word... ${currentCard.word}?`);
+  }
+
+  checkChoice(selectedLetter, btn, card) {
+    if (selectedLetter === card.letter) {
+      btn.classList.add('correct');
+      this.services.sound.playSuccess();
+      const rect = btn.getBoundingClientRect();
+      this.services.confetti.burst(rect.left + rect.width / 2, rect.top + rect.height / 2, 20);
+      
+      const remainder = card.word.substring(1);
+      this.labelEl.innerHTML = `<span class="missing-letter" style="color:var(--color-green); border-bottom-color:var(--color-green);">${card.letter}</span><span>${remainder}</span>`;
+      
+      this.services.speech.speak(`${card.letter} is for ${card.word}!`);
+
+      this.currentIndex++;
+      this.choicesEl.querySelectorAll('.phonics-choice-btn').forEach(b => {
+        b.style.pointerEvents = 'none';
+      });
+
+      this.addTimeout(() => this.loadCard(), 2000);
+    } else {
+      btn.classList.add('incorrect');
+      this.services.sound.playBoing();
+      this.services.speech.speak(`Try again!`);
+      
+      btn.style.animation = 'none';
+      btn.offsetHeight;
+      btn.style.animation = 'shake 0.3s ease';
+      
+      this.addTimeout(() => {
+        btn.classList.remove('incorrect');
+      }, 500);
+    }
+  }
+
+  cleanup() {
+    super.cleanup();
   }
 }
 
@@ -2964,7 +3759,7 @@ const GAME_REGISTRY = {
   xylophone: { title: "Xylophone", icon: "🎼", cat: "music", gameClass: GameXylophone },
   shapes: { title: "Shape Sorter", icon: "🧩", cat: "puzzle", gameClass: GameShapeMatcher },
   catcher: { title: "Fruit Catcher", icon: "🧺", cat: "action", gameClass: GameFruitCatcher },
-  coloring: { title: "Dino Coloring", icon: "🦖", cat: "creative", gameClass: GameColoringBook },
+  coloring: { title: "Animal Coloring", icon: "🎨", cat: "creative", gameClass: GameColoringBook },
   memory: { title: "Animal Cards", icon: "🐱", cat: "puzzle", gameClass: GameMemoryMatch },
   startap: { title: "Star Strike", icon: "⭐", cat: "action", gameClass: GameStarTap },
   feedmonster: { title: "Feed Monster", icon: "👾", cat: "creative", gameClass: GameFeedMonster },
@@ -2982,7 +3777,8 @@ const GAME_REGISTRY = {
   beemaze: { title: "Bee Maze", icon: "🐝", cat: "puzzle", gameClass: GameBeeMaze },
   rocketlander: { title: "Rocket Lander", icon: "🚀", cat: "action", gameClass: GameRocketLander },
   icecreamstack: { title: "Ice Cream Stack", icon: "🍦", cat: "action", gameClass: GameIceCreamStack },
-  underseabubbles: { title: "Undersea Pop", icon: "🫧", cat: "action", gameClass: GameUnderseaBubbles }
+  underseabubbles: { title: "Undersea Pop", icon: "🫧", cat: "action", gameClass: GameUnderseaBubbles },
+  phonics: { title: "Phonics Match", icon: "🍎", cat: "puzzle", gameClass: GamePhonicsMatcher }
 };
 
 class GameManager {

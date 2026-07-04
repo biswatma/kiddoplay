@@ -794,48 +794,236 @@ body {
   font-size: 0.95rem;
 }
 
-/* Game 9: Dino Coloring Book */
+/* Game 9: Advanced Animal Coloring Book */
 .coloring-layout {
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
-}
-.coloring-canvas-container {
-  flex: 1;
-  display: flex;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, #fcfcf9 0%, #e2dfd3 100%); /* Desk background */
   align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  touch-action: none;
+}
+
+.coloring-header {
+  display: flex;
+  gap: 8px;
   justify-content: center;
-  padding: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 600px;
+}
+
+.coloring-animal-btn {
+  font-family: var(--font-kids);
+  font-weight: 700;
+  font-size: 0.85rem;
   background: #ffffff;
-}
-.coloring-canvas-container svg {
-  max-width: 90%;
-  max-height: 90%;
-}
-.color-palette {
-  height: 72px;
-  border-top: 3px solid var(--color-border);
-  background: rgba(0,0,0,0.02);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-}
-.color-swatch {
-  width: 44px;
-  height: 44px;
   border: 3px solid var(--color-border);
-  border-radius: 50%;
+  border-radius: 16px;
+  padding: 6px 12px;
   cursor: pointer;
-  box-shadow: 0 3px 0 var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 0 var(--color-border);
   transition: all 0.1s ease;
 }
-.color-swatch.active {
-  transform: scale(1.15) translateY(-2px);
-  box-shadow: 0 5px 0 var(--color-border);
-  border-color: #000;
+.coloring-animal-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--color-border);
 }
+.coloring-animal-btn.active {
+  background: var(--color-yellow);
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--color-border);
+}
+
+.coloring-board-outer {
+  flex: 1;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  touch-action: none;
+}
+
+.coloring-board {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 8px solid #8B5A2B; /* Wood Frame */
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2), inset 0 0 8px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  touch-action: none;
+}
+
+.coloring-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  touch-action: none;
+}
+
+.coloring-outline-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Tool controls on the side of the drawing board */
+.coloring-toolbox {
+  position: absolute;
+  right: -58px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 5;
+}
+
+.coloring-tool-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 3px solid var(--color-border);
+  background: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  box-shadow: 0 4px 0 var(--color-border);
+  transition: all 0.1s ease;
+}
+.coloring-tool-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--color-border);
+}
+.coloring-tool-btn.active {
+  background: var(--color-yellow);
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--color-border);
+}
+
+/* Pencils Palette */
+.coloring-pencils-container {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: flex-end;
+  height: 95px;
+  padding: 0 8px;
+  width: 100%;
+  max-width: 600px;
+  border-bottom: 4px solid var(--color-border);
+}
+
+.coloring-pencil {
+  width: 28px;
+  height: 75px;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-origin: bottom center;
+}
+
+.coloring-pencil.active {
+  transform: translateY(-20px) scale(1.1);
+}
+
+/* Wood sharpen cone */
+.coloring-pencil::before {
+  content: '';
+  position: absolute;
+  top: -14px;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-bottom: 14px solid #e5c09f; /* Wood color */
+}
+
+/* Colored tip */
+.coloring-pencil::after {
+  content: '';
+  position: absolute;
+  top: -14px;
+  left: 10px;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 5px solid var(--pencil-color); /* Tip color */
+}
+
+.coloring-pencil-body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--pencil-color);
+  border-left: 3px solid rgba(255,255,255,0.25);
+  border-right: 3px solid rgba(0,0,0,0.15);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: inset 0 -8px 0 rgba(0,0,0,0.1), 0 2px 5px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px), (max-height: 550px) {
+  .coloring-layout {
+    padding: 6px;
+  }
+  .coloring-board-outer {
+    max-width: 320px;
+    margin: 4px 0;
+  }
+  .coloring-toolbox {
+    right: -42px;
+  }
+  .coloring-tool-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+  .coloring-pencil {
+    width: 22px;
+    height: 60px;
+  }
+  .coloring-pencil::before {
+    top: -10px;
+    border-left-width: 11px;
+    border-right-width: 11px;
+    border-bottom-width: 10px;
+  }
+  .coloring-pencil::after {
+    top: -10px;
+    left: 8px;
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 4px;
+  }
+  .coloring-pencils-container {
+    height: 80px;
+  }
+}
+
 
 /* Game 10: Memory Match */
 .memory-grid {
@@ -1727,5 +1915,368 @@ body {
 @keyframes wiggle {
   0% { transform: rotate(-8deg); }
   100% { transform: rotate(8deg); }
+}
+
+/* ==========================================
+   5. MONTESSORI TRACING GAME STYLES
+   ========================================== */
+.montessori-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  background: radial-gradient(circle, #f5ecd8 0%, #dbcbab 100%); /* Wooden desk feel */
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  touch-action: none;
+}
+
+.montessori-board-outer {
+  flex: 1;
+  width: 100%;
+  max-width: 580px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  touch-action: none;
+}
+
+.montessori-board {
+  width: 100%;
+  aspect-ratio: 1.1 / 1;
+  max-height: 420px;
+  border: 10px solid #8B5A2B; /* Wood Frame */
+  border-radius: 20px;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.3), inset 0 0 10px rgba(0,0,0,0.4);
+  position: relative;
+  overflow: hidden;
+  touch-action: none;
+}
+
+/* Red/Pink Board for Consonants */
+.montessori-board.consonant-board {
+  background-color: #ff9a9e;
+  background-image: radial-gradient(circle, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); /* Felt Texture */
+}
+
+/* Light Blue Board for Vowels */
+.montessori-board.vowel-board {
+  background-color: #a1c4fd;
+  background-image: radial-gradient(circle, #a1c4fd 0%, #c2e9fb 100%);
+}
+
+/* Green Board for Numbers */
+.montessori-board.number-board {
+  background-color: #96e6a1;
+  background-image: radial-gradient(circle, #96e6a1 0%, #d4fc79 100%);
+}
+
+/* Yellow Board for Shapes */
+.montessori-board.shape-board {
+  background-color: #f7d070;
+  background-image: radial-gradient(circle, #f7d070 0%, #fdf6e2 100%);
+}
+
+/* Sandpaper SVG letter path overlay */
+.montessori-path-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Main Canvas for user tracing */
+.montessori-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+/* Start dot */
+.montessori-start-dot {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #00f5d4;
+  border: 4px solid #ffffff;
+  box-shadow: 0 0 12px #00f5d4;
+  z-index: 4;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: pulse-dot 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: translate(-50%, -50%) scale(0.9); box-shadow: 0 0 8px #00f5d4; }
+  50% { transform: translate(-50%, -50%) scale(1.25); box-shadow: 0 0 20px #00f5d4; }
+}
+
+/* Off-track instruction banner */
+.montessori-alert {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 89, 94, 0.95);
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.montessori-alert.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(5px);
+}
+
+/* Montessori Tracing Controls & Selection Drawer */
+.montessori-drawer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.montessori-tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.4);
+  padding: 4px;
+  border-radius: 30px;
+  border: 2px solid var(--color-border);
+  gap: 4px;
+}
+
+.montessori-tab-btn {
+  font-family: var(--font-kids);
+  font-weight: 700;
+  font-size: 0.85rem;
+  border: none;
+  background: transparent;
+  padding: 6px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  color: var(--color-border);
+  transition: all 0.2s ease;
+}
+.montessori-tab-btn.active {
+  background: #ffffff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+.montessori-items-tray {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 4px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.montessori-item-card {
+  width: 50px;
+  height: 50px;
+  background: #ffffff;
+  border: 3px solid var(--color-border);
+  border-radius: 12px;
+  font-family: var(--font-kids);
+  font-weight: 700;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--color-border);
+  transition: all 0.1s ease;
+}
+.montessori-item-card:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--color-border);
+}
+.montessori-item-card.active {
+  background: var(--color-yellow);
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--color-border);
+}
+
+@media (max-width: 768px), (max-height: 550px) {
+  .montessori-layout {
+    padding: 8px;
+  }
+  .montessori-board {
+    max-height: 280px;
+  }
+  .montessori-item-card {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+}
+
+/* ==========================================
+   6. PHONICS MATCHING GAME STYLES
+   ========================================== */
+.phonics-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  background: radial-gradient(circle, #eef1f6 0%, #d5e0ea 100%);
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  touch-action: none;
+}
+
+.phonics-card-outer {
+  flex: 1;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.phonics-card {
+  width: 100%;
+  aspect-ratio: 1.1 / 1;
+  max-height: 320px;
+  background: #ffffff;
+  border: 5px solid var(--color-border);
+  border-radius: 28px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  position: relative;
+  animation: scale-up 0.3s ease-out;
+}
+
+.phonics-emoji {
+  font-size: 5.5rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+.phonics-word-label {
+  font-family: var(--font-kids);
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: var(--color-border);
+  letter-spacing: 2px;
+}
+
+.phonics-word-label span.missing-letter {
+  color: var(--color-red);
+  border-bottom: 4px solid var(--color-red);
+  padding: 0 4px;
+}
+
+.phonics-choices {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+  padding: 10px;
+}
+
+.phonics-choice-btn {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 4px solid var(--color-border);
+  background: #ffffff;
+  font-family: var(--font-kids);
+  font-weight: 700;
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 0 var(--color-border);
+  transition: all 0.1s ease;
+  user-select: none;
+}
+.phonics-choice-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 3px 0 var(--color-border);
+}
+.phonics-choice-btn.correct {
+  background: var(--color-green);
+  color: #ffffff;
+  transform: scale(1.1);
+}
+.phonics-choice-btn.incorrect {
+  background: var(--color-red);
+  color: #ffffff;
+  animation: shake 0.3s ease;
+}
+
+.phonics-progress-bar {
+  width: 100%;
+  max-width: 400px;
+  height: 12px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid var(--color-border);
+}
+
+.phonics-progress-fill {
+  height: 100%;
+  background: var(--color-blue);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px) rotate(-3deg); }
+  75% { transform: translateX(8px) rotate(3deg); }
+}
+
+@media (max-width: 768px), (max-height: 550px) {
+  .phonics-layout {
+    padding: 8px;
+  }
+  .phonics-card {
+    max-height: 200px;
+    gap: 8px;
+  }
+  .phonics-emoji {
+    font-size: 3.5rem;
+  }
+  .phonics-word-label {
+    font-size: 1.3rem;
+  }
+  .phonics-choice-btn {
+    width: 52px;
+    height: 52px;
+    font-size: 1.6rem;
+    box-shadow: 0 4px 0 var(--color-border);
+  }
 }
 
