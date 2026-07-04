@@ -3861,7 +3861,7 @@ class GameManager {
         <span class="card-badge ${game.cat}-badge">${game.cat}</span>
       `;
 
-      card.addEventListener('pointerdown', () => this.launchGame(id));
+      card.addEventListener('click', () => this.launchGame(id));
       this.grid.appendChild(card);
     }
   }
